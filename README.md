@@ -208,21 +208,23 @@ Android Studio предлагает поддержку лямбда-синтак
 
 Исходя из истории Android API, фрагменты можно рассматривать как часть пользовательского интерфейса экрана. Другими словами, фрагменты обычно являются частью UI. Activities обычно рассматриваются как контроллеры, которые особенно важны для управления состоянием и жизненным циклом. Однако, может быть иначе: activity могут исполнять функции, связанные с UI ([переходы между экранами](https://developer.android.com/about/versions/lollipop.html)), а  [фрагменты могут быть использованы только как контроллеры](http://developer.android.com/guide/components/fragments.html#AddingWithoutUI). Мы советуем принимать решение, имея в виду, что архитектура, которая строится только на фрагментах, только на activity или только на view, может иметь много недостатков. Вот пара советов по поводу того, на что нужно обратить внимание, но относитесь к этим советам критично:
 
-- Avoid using [nested fragments](https://developer.android.com/about/versions/android-4.2.html#NestedFragments) extensively, because [matryoshka bugs](http://delyan.me/android-s-matryoshka-problem/) can occur. Use nested fragments only when it makes sense (for instance, fragments in a horizontally-sliding ViewPager inside a screen-like fragment) or if it's a well-informed decision.
-- Avoid putting too much code in activities. Whenever possible, keep them as lightweight containers, existing in your application primarily for the lifecycle and other important Android-interfacing APIs. Prefer single-fragment activities instead of plain activities - put UI code into the activity's fragment. This makes it reusable in case you need to change it to reside in a tabbed layout, or in a multi-fragment tablet screen. Avoid having an activity without a corresponding fragment, unless you are making an informed decision.
+- Избегайте чрезмерного использования [вложенных фрагментов](https://developer.android.com/about/versions/android-4.2.html#NestedFragments), так как может появится побочный эффект [матрёшки](http://delyan.me/android-s-matryoshka-problem/). Используйте вложенные  фрагменты только тогда, когда в этом есть смысл (например, фрагменты в горизонтальной разметке ViewPager внутри фрагмента во весь экран) или если вы действительно знаете что делаете.
+- Избегайте чрезмерного кода в activity. По возможности, используйте их как контейнеры которые отвечают за жизненный цикл и другие важные элементы интерфейса Android API. Вместо того чтобы использовать activity, используйте activity с фрагментом и вынесите код, отвечающий за UI внутрь фрагмента. Это сделает возможным повторное использование фрагмента если вам потребуется поместить его в разметку с во вкладки (tabbed layout), или на экран планшета с несколькими фрагментами. Избегайте создания activity без фрагментов, кроме случаев, когда вы делаете это с определенной целью. 
 - Don't abuse Android-level APIs such as heavily relying on Intent for your app's internal workings. You could affect the Android OS or other applications, creating bugs or lag. For instance, it is known that if your app uses Intents for internal communication between your packages, you might incur multi-second lag on user experience if the app was opened just after OS boot.
+- Не стоит злоупотреблять Android API, например, полагаясь только на механизм Intent для внутренней работы приложения. Вы можете повлиять на работу операционной системы Android и других приложений, вызвав ошибки или зависания. Например, известно, что если ваше приложение использует механизм Intent для внутренней связи между пакетами приложения, оно может вызвать зависание в несколько секунд, если было открыто сразу после загрузки ОС.
 
-### Java packages architecture
+### Архитектура пакетов Java
 
-Java architectures for Android applications can be roughly approximated in [Model-View-Controller](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). In Android, [Fragment and Activity are actually controller classes](http://www.informit.com/articles/article.aspx?p=2126865). On the other hand, they are explicity part of the user interface, hence are also views.
+Архитектура Java для приложения Android похожа на [Model-View-Controller](http://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller). В Android, [Фрагмент и Activity являются контроллерами](http://www.informit.com/articles/article.aspx?p=2126865). С другой стороны, они также являются частью пользовательского интерфейса, следовательно они представляют собой еще и Views.
 
-For this reason, it is hard to classify fragments (or activities) as strictly controllers or views. It's better to let them stay in their own `fragments` package. Activities can stay on the top-level package as long as you follow the advice of the previous section. If you are planning to have more than 2 or 3 activities, then make also an `activities` package.
+По этой причине сложно классифицировать фрагменты (или activities) как только Controller или  View. Лучше поместить их в отдельный пакет `fragments`. Activities могут оставаться в верхнем уровне пакета до тех пор пока вы следуете совету из предыдущей секции. Если вы планируете создать 2 или 3 activities, создайте отдельный пакет `activities`.
 
-Otherwise, the architecture can look like a typical MVC, with a `models` package containing POJOs to be populated through the JSON parser with API responses, and a `views` package containing your custom Views, notifications, action bar views, widgets, etc. Adapters are a gray matter, living between data and views. However, they typically need to export some View via `getView()`, so you can include the `adapters` subpackage inside `views`.
+Во всем остальном, архитектура выглядит как обычный MVC, с пакетом `models` содержащим объекты POJO, которые будут наполнены информацией при помощи JSON-парсинга ответов, полученных от API, и пакетом `views`,  содержащим кастомные Views, уведомления, action bar, виджеты, и т.д. Адапторы находятся где-то между data и views, связывая их между собой. Однако им нужно экспортировать View с помощью метода `getView()`, по этому можно поместить пакет `adapters` внутрь пакета `views`.
 
-Some controller classes are application-wide and close to the Android system. These can live in a `managers` package. Miscellaneous data processing classes, such as "DateUtils", stay in the `utils` package. Classes that are responsible for interacting with the backend stay in the `network` package.
+Некоторые Controller-классы используются во всем приложении работая напрямую с системой Android.
+Эти классы могут находиться в пакете `managers`. Различные классы для обработки данных, такие как "DateUtils", должны быть в пакете `utils`, а классы, отвечающие за взаимодействие с сетью - в пакете `network`.
 
-All in all, ordered from the closest-to-backend to the closest-to-the-user:
+Пакеты сортируются в порядке от closest-to-backend до closest-to-the-user:
 
 ```
 com.futurice.project
@@ -238,7 +240,7 @@ com.futurice.project
    └─ notifications
 ```
 
-### Resources
+### Ресурсы
 
 **Naming.** Follow the convention of prefixing the type, as in `type_foo_bar.xml`. Examples: `fragment_contact_details.xml`, `view_primary_button.xml`, `activity_main.xml`.
 
