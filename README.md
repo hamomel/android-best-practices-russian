@@ -195,12 +195,12 @@ retrolambda {
 }
 ```
 
-Android Studio offers code assist support for Java8 lambdas. If you are new to lambdas, just use the following to get started:
+Android Studio предлагает поддержку лямбда-синтаксиса Java8. Если у вас нет опыта работы с лямбдами, начните с этого:
 
-- Any interface with just one method is "lambda friendly" and can be folded into the more tight syntax
-- If in doubt about parameters and such, write a normal anon inner class and then let Android Studio fold it into a lambda for you.
+- Любой интерфейс с одним методом вполне совместим с лямбда-выражениями и может быть упрощён в их помошью
+- Если вам непонятно какие параметры использовать, напишите обычный внутренний класс и позвольте Android Studio преобразовать его в лямбда-выражение.
 
-**Beware of the dex method limitation, and avoid using many libraries.** Android apps, when packaged as a dex file, have a hard limitation of 65536 referenced methods [[1]](https://medium.com/@rotxed/dex-skys-the-limit-no-65k-methods-is-28e6cb40cf71) [[2]](http://blog.persistent.info/2014/05/per-package-method-counts-for-androids.html) [[3]](http://jakewharton.com/play-services-is-a-monolith/). You will see a fatal error on compilation if you pass the limit. For that reason, use a minimal amount of libraries, and use the [dex-method-counts](https://github.com/mihaip/dex-method-counts) tool to determine which set of libraries can be used in order to stay under the limit. Especially avoid using the Guava library, since it contains over 13k methods.
+**Помните о лимите dex-файла на количество методов и избегайте его привышения.** Android приложения, запакованный в  dex файл, не могут привысить лимит в 65536 ссылочных методов [[1]](https://medium.com/@rotxed/dex-skys-the-limit-no-65k-methods-is-28e6cb40cf71) [[2]](http://blog.persistent.info/2014/05/per-package-method-counts-for-androids.html) [[3]](http://jakewharton.com/play-services-is-a-monolith/). При компиляции вы увидите соответствующую ошибку. Поэтому используйте ограниченное количество библиотек и утилиту [dex-method-counts](https://github.com/mihaip/dex-method-counts) для определения оптимального набора библиотек, не выходящего за лимит. Особенно избегайте библиотеки Guava, так как она содержит 13k методов.
 
 ### Activities and Fragments
 
