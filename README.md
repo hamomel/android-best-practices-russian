@@ -349,7 +349,6 @@ com.futurice.project
 </resources>
 ```
 
-Ask for this palette from the designer of the application. The names do not need to be color names as "green", "blue", etc. Names such as "brand_primary", "brand_secondary", "brand_negative" are totally acceptable as well. Formatting colors as such will make it easy to change or refactor colors, and also will make it explicit how many different colors are being used. Normally for a aesthetic UI, it is important to reduce the variety of colors being used.
 Цветовую палитру определяет дизайнер приложения. Не обязательно называть цвета «green», «blue», и т.д. Названия вроде «brand_primary», «brand_secondary», «brand_negative» вполне приемлемы. Такие названия цветов облегчают их рефакторинг, а также позволяют понять, сколько цветов используется. Для создания красивого UI, важно уменьшить количество используемых цветов, если это возможно.
 
 **Оформляйте dimens.xml как colors.xml.** Вам также потребуется создать что-то вроде "палитры" отступов и размеров, аналогично цветам в файле colors.xml. Пример хорошо оформленного файла dimens.xml:
