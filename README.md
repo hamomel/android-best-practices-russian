@@ -308,11 +308,11 @@ com.futurice.project
 
 Скорее всего вы захотете сделать то же самое и для кнопок, но не нужно на этом останавливаться. Используйте этот принцип для группировки схожих или повторяющихся атрибутов `android:****` в отдельный файл стилей.
 
-**Split a large style file into other files.** You don't need to have a single `styles.xml` file. Android SDK supports other files out of the box, there is nothing magical about the name `styles`, what matters are the XML tags `<style>` inside the file. Hence you can have files `styles.xml`, `styles_home.xml`, `styles_item_details.xml`, `styles_forms.xml`. Unlike resource directory names which carry some meaning for the build system, filenames in `res/values` can be arbitrary.
+**Разделите большой файл стилей на несколько маленьких.** Не нужно держать все стили в одном файле `styles.xml`. Android SDK поддержывает и другие файлы, нет ничего магического в названии файла `styles`, единственное что важно, это тег `<style>` внутри него. Следовательно, вы можете создать файлы `styles.xml`, `styles_home.xml`, `styles_item_details.xml`, `styles_forms.xml` и т.д. В отличие от имен папок с ресурсами, которые несут определенное значение для системы сборки, имена файлов в `res/values` могут быть произвольными.
 
-**`colors.xml` is a color palette.** There should be nothing else in your `colors.xml` than just a mapping from a color name to an RGBA value. Do not use it to define RGBA values for different types of buttons.
+**Файл `colors.xml` - это палитра цветов.** В файле `colors.xml` не должно быть ничего другого кроме присвоения названиям цветов определенных значений RGBA. Не используйте его чтобы задавать параметры RGBA для разных типов кнопок.
 
-*Don't do this:*
+*Неправильный вариант файла colors.xml:*
 
 ```xml
 <resources>
@@ -326,9 +326,9 @@ com.futurice.project
     <color name="comment_shadow">#323232</color>
 ```
 
-You can easily start repeating RGBA values in this format, and that makes it complicated to change a basic color if needed. Also, those definitions are related to some context, like "button" or "comment", and should live in a button style, not in `colors.xml`.
+При таком подходе очень легко создать повторные значения RGBA и на много сложнее менять цвета. Кроме того, эти цвета относятся к определённому контенту, как «button» или «comment», поэтому должны быть описаны в стиле кнопки, а не в файле `colors.xml`.
 
-Instead, do this:
+Правильно файл colors.xml:
 
 ```xml
 <resources>
@@ -350,8 +350,9 @@ Instead, do this:
 ```
 
 Ask for this palette from the designer of the application. The names do not need to be color names as "green", "blue", etc. Names such as "brand_primary", "brand_secondary", "brand_negative" are totally acceptable as well. Formatting colors as such will make it easy to change or refactor colors, and also will make it explicit how many different colors are being used. Normally for a aesthetic UI, it is important to reduce the variety of colors being used.
+Цветовую палитру определяет дизайнер приложения. Не обязательно называть цвета «green», «blue», и т.д. Названия вроде «brand_primary», «brand_secondary», «brand_negative» вполне приемлемы. Такие названия цветов облегчают их рефакторинг, а также позволяют понять, сколько цветов используется. Для создания красивого UI, важно уменьшить количество используемых цветов, если это возможно.
 
-**Treat dimens.xml like colors.xml.** You should also define a "palette" of typical spacing and font sizes, for basically the same purposes as for colors. A good example of a dimens file:
+**Оформляйте dimens.xml как colors.xml.** Вам также потребуется создать что-то вроде "палитры" отступов и размеров, аналогично цветам в файле colors.xml. Пример хорошо оформленного файла dimens.xml:
 
 ```xml
 <resources>
@@ -377,7 +378,8 @@ Ask for this palette from the designer of the application. The names do not need
 </resources>
 ```
 
-You should use the `spacing_****` dimensions for layouting, in margins and paddings, instead of hard-coded values, much like strings are normally treated. This will give a consistent look-and-feel, while making it easier to organize and change styles and layouts.
+Рекомендуется не писать числовые значения в атрибутах разметки (полях и отступах), а использовать константы вида `spacing_****` (по тому же принципу что и файлы для локализиции строковых значений).
+Это делает разметку понятнее и облегчает ее рефакторинг.
 
 **strings.xml**
 
