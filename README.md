@@ -383,35 +383,35 @@ Ask for this palette from the designer of the application. The names do not need
 
 **strings.xml**
 
-Name your strings with keys that resemble namespaces, and don't be afraid of repeating a value for two or more keys. Languages are complex, so namespaces are necessary to bring context and break ambiguity.
+Используйте ключи в именах строк, как и в именах пакетов — это поможет вам решить проблему с одинаковыми именами и лучше понимать контекст использования строк.
 
-**Bad**
+**Плохой пример**
 ```xml
 <string name="network_error">Network error</string>
 <string name="call_failed">Call failed</string>
 <string name="map_failed">Map loading failed</string>
 ```
 
-**Good**
+**Хороший пример**
 ```xml
 <string name="error.message.network">Network error</string>
 <string name="error.message.call">Call failed</string>
 <string name="error.message.map">Map loading failed</string>
 ```
 
-Don't write string values in all uppercase. Stick to normal text conventions (e.g., capitalize first character). If you need to display the string in all caps, then do that using for instance the attribute [`textAllCaps`](http://developer.android.com/reference/android/widget/TextView.html#attr_android:textAllCaps) on a TextView.
+Не пишите значения строк в верхнем регистре. Придерживайтесь стартных конвенций (например, первая буква - заглавная). Если вам нужно отобразить строку в верхнем регистре, сделайте это используя атрибут [`textAllCaps`](http://developer.android.com/reference/android/widget/TextView.html#attr_android:textAllCaps) внутри элемента TextView.
 
-**Bad**
+**Плохой пример**
 ```xml
 <string name="error.message.call">CALL FAILED</string>
 ```
 
-**Good**
+**Хороший пример**
 ```xml
 <string name="error.message.call">Call failed</string>
 ```
 
-**Avoid a deep hierarchy of views.** Sometimes you might be tempted to just add yet another LinearLayout, to be able to accomplish an arrangement of views. This kind of situation may occur:
+**Избегайте глубокой иерархии Views.** Sometimes you might be tempted to just add yet another LinearLayout, to be able to accomplish an arrangement of views. This kind of situation may occur:
 
 ```xml
 <LinearLayout
