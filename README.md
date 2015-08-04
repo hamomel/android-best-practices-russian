@@ -10,16 +10,16 @@
 #### Храните пароли и важные данные в файле gradle.properties
 #### Не пишите свой HTTP клиент, используйте библиотеки Volley или OkHttp
 #### Используйте библиотеку Jackson для парсинга JSON данных
-#### Не стоит использовать Guava и большое количество библиотек чтобы не привысить лимит методов (65k)
+#### Не нужно использовать Guava и большое количество библиотек чтобы не привысить лимит методов (65k)
 #### Используйте фрагменты для отображения пользовательского интерфейса
 #### Используйте activity только для управления фрагментами
 #### XML-разметка — это код, который нужно писать аккуратно
 #### Чтобы не дублировать атрибуты в XML-разметке, используйте стили
-#### Используйте несколько файлов со стилями, не стоит создавать один огромный файл
+#### Используйте несколько файлов со стилями, не нужно создавать один огромный файл
 #### Сделайте файл colors.xml компактным. Не дублируйте цвета, задайте основную палитру
 #### То же касается и dimens.xml, задайте только основные константы
 #### Избегайте слишком глубокой иерархии элементов ViewGroup
-#### Не стоит обрабатывать WebView на клиентской стороне, будьте внимательны к возможным утечкам
+#### Не нужно обрабатывать WebView на клиентской стороне, будьте внимательны к возможным утечкам
 #### Используйте Robolectric для unit-тестов, а Robotium для UI-тестов
 #### Используйте Genymotion в качестве эмулятора
 #### Всегда используйте ProGuard или DexGuard
@@ -89,15 +89,15 @@ new-structure
 Наличие папки `app` в верхнем уровне иерархии помогает отделить ваше приложение от библиотек (например, `library-foobar`), которые в нем используются. В таком случае файл `settings.gradle` хранит проекты, на которые может ссылаться `app/build.gradle`.
 
 
-### Gradle configuration
+### Конфигурация Gradle
 
-**General structure.** Follow [Google's guide on Gradle for Android](http://tools.android.com/tech-docs/new-build-system/user-guide)
+**Общая структура.** Следуйте [Рекомендациям Google для Gradle for Android](http://tools.android.com/tech-docs/new-build-system/user-guide)
 
-**Small tasks.** Instead of (shell, Python, Perl, etc) scripts, you can make tasks in Gradle. Just follow [Gradle's documentation](http://www.gradle.org/docs/current/userguide/userguide_single.html#N10CBF) for more details.
+**Маленькие задачи.** Вместо скриптов на shell, Python, Perl, вы можете создавать задачи в Gradle. Подробне в документации [Документация Gradle](http://www.gradle.org/docs/current/userguide/userguide_single.html#N10CBF).
 
-**Passwords.** In your app's `build.gradle` you will need to define the `signingConfigs` for the release build. Here is what you should avoid:
+**Пароли.** В файле `build.gradle` вашего приложения необходимо задать `signingConfigs` для релизной сборки. Here is what you should avoid:
 
-_Don't do this_. This would appear in the version control system.
+_Не делайте так_. Эта информаци появится в системе контроля версий.
 
 ```groovy
 signingConfigs {
@@ -110,14 +110,14 @@ signingConfigs {
 }
 ```
 
-Instead, make a `gradle.properties` file which should _not_ be added to the version control system:
+Вместо этого, создайте файл `gradle.properties`, который _не_ будет добавлен в систему контроля версий:
 
 ```
 KEYSTORE_PASSWORD=password123
 KEY_PASSWORD=password789
 ```
 
-That file is automatically imported by gradle, so you can use it in `build.gradle` as such:
+Gradle автоматически импортирует этот файл, по этому вы можете использовать его в `build.gradle`:
 
 ```groovy
 signingConfigs {
@@ -135,7 +135,7 @@ signingConfigs {
 }
 ```
 
-**Prefer Maven dependency resolution instead of importing jar files.** If you explicitly include jar files in your project, they will be of some specific frozen version, such as `2.1.1`. Downloading jars and handling updates is cumbersome, this is a problem that Maven solves properly, and is also encouraged in Android Gradle builds. For example:
+**Старайтесь использовать зависимости Maven вместо импортирования jar-файлов.** Если вы явно включаете jar файл в ваш проект, его версия будет неизменна, например `2.1.1`. Скачивать и обновлять зависимости это непростая задача, которую Maven с легкостью решает, что также приветствуется в сборках Android Gradle. Например:
 
 ```groovy
 dependencies {
@@ -144,12 +144,12 @@ dependencies {
 }
 ```    
 
-**Avoid Maven dynamic dependency resolution**
-Avoid the use of dynamically versioned, such as `2.1.+` as this may result in different in unstable builds or subtle, untracked differences in behavior between builds. The use of static versions such as `2.1.1` helps create a more stable, predictable and repeatable development environment.
+**Избегайте использования динамических зависимостей Maven**
+Не нужно использовать динамические версии, такие как `2.1.+` так как это может привести к нарушению стабильности сборки, а также непредсказуемым различиям между разными сборками. Использование статических версий как  `2.1.1` помогает создать более стабильную и предсказуемую среду разработки.
 
-### IDEs and text editors
+### Среда разработки (IDE) и текстовые редакторы
 
-**Use whatever editor, but it must play nicely with the project structure.** Editors are a personal choice, and it's your responsibility to get your editor functioning according to the project structure and build system.
+**Искользуйте любой редактор, который удобно отображает структуру проекта.** Текстовый редактор это дело вкуса, так или иначе вам нужно будет настроить его в соответствии со структурой проекта и системой сборки.
 
 The most recommended IDE at the moment is [Android Studio](https://developer.android.com/sdk/installing/studio.html), because it is developed by Google, is closest to Gradle, uses the new project structure by default, is finally in stable stage, and is tailored for Android development.
 
