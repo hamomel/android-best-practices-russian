@@ -166,9 +166,10 @@ dependencies {
 **RxJava** - библиотека для Reactive Programming, другими словами, для обработки асинхронных событий. Это очень мощная и многообещающая концепция, которая сначала может смутить своей необычностью. Мы рекомендуем подумать, перед тем как использовать эту библиотеку как фундамент архитектуры вашего приложения. Существуют проекты, созданные с использованием RxJava, и вы можете обратиться за помощью в использовании RxJava к однуму из этих людей: Timo Tuominen, Olli Salonen, Andre Medeiros, Mark Voit, Antti Lammi, Vera Izrailit, Juha Ristolainen. Мы написали несколько статей на эту тему: 
 [[1]](http://blog.futurice.com/tech-pick-of-the-week-rx-for-net-and-rxjava-for-android), [[2]](http://blog.futurice.com/top-7-tips-for-rxjava-on-android), [[3]](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754), [[4]](http://blog.futurice.com/android-development-has-its-own-swift).
 
-If you have no previous experience with Rx, start by applying it only for responses from the API. Alternatively, start by applying it for simple UI event handling, like click events or typing events on a search field. If you are confident in your Rx skills and want to apply it to the whole architecture, then write Javadocs on all the tricky parts. Keep in mind that another programmer unfamiliar to RxJava might have a very hard time maintaining the project. Do your best to help them understand your code and also Rx.
+Если у вас нет опыта работы с Rx, то начните с использования API. Или вы можете начать с обработки простых событий пользовательского интерфейса, таких как обработка кликов или ввод текста. Если вы уверены в ваших навыках использования Rx и хотите использовать его во всей архитектуре приложения, напишите Javadocs о самых сложных моментах. Помните, что у программиста, не имеющего опыта  виспользовании RxJava, могут быть большие проблемы при работе с проектом. Помогите понять ваш код и Rx.
 
-**[Retrolambda](https://github.com/evant/gradle-retrolambda)** is a Java library for using Lambda expression syntax in Android and other pre-JDK8 platforms. It helps keep your code tight and readable especially if you use a functional style with for example with RxJava. To use it, install JDK8, set that as your SDK Location in the Android Studio Project Structure dialog, and set `JAVA8_HOME` and `JAVA7_HOME` environment variables, then in the project root build.gradle:
+
+**[Retrolambda](https://github.com/evant/gradle-retrolambda)** - Java библиотека fдля использования Lambda-выражений в Android и других платформах с JDK ниже версии 8 . Это поможет сохранить компактность и читабельность кода особенно при использовании функционального стиля, например с RxJava. Для ее использования установите JDK8, выберите его как  SDK в настройках структуры проекта в Android Studio, и задайте переменные `JAVA8_HOME` и `JAVA7_HOME`, затем в корневом файле build.gradle:
 
 ```groovy
 dependencies {
@@ -176,7 +177,7 @@ dependencies {
 }
 ```
 
-and in each module's build.gradle, add
+и в файлах build.gradle для каждого модуля:
 
 ```groovy
 apply plugin: 'retrolambda'
