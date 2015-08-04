@@ -242,16 +242,16 @@ com.futurice.project
 
 ### Ресурсы
 
-**Naming.** Follow the convention of prefixing the type, as in `type_foo_bar.xml`. Examples: `fragment_contact_details.xml`, `view_primary_button.xml`, `activity_main.xml`.
+**Имена.** Следуйте конвенции и указывайте тип в начале названия, как `тип_файла_имя_файла.xml`. Примеры: `fragment_contact_details.xml`, `view_primary_button.xml`, `activity_main.xml`.
 
-**Organizing layout XMLs.** If you're unsure how to format a layout XML, the following convention may help.
+**Структура разметки XML.** Если вы не уверены как форматировать XML, вам могут помочь следующие правила:
 
-- One attribute per line, indented by 4 spaces
-- `android:id` as the first attribute always
-- `android:layout_****` attributes at the top
-- `style` attribute at the bottom
-- Tag closer `/>` on its own line, to facilitate ordering and adding attributes.
-- Rather than hard coding `android:text`, consider using [Designtime attributes](http://tools.android.com/tips/layout-designtime-attributes) available for Android Studio.
+- Один атрибут на строку с отступом 4 пробела
+- `android:id` всегда указан как первый атрибут
+- `android:layout_****` указываются следом
+- `style` атрибуты указываются внизу
+- Закрывающий тег `/>`на отдельной линии, чтобы облегчить добавление и сортировку атрибутов.
+- Вместо ввода строк `android:text` вручную, используйте [Designtime атрибуты](http://tools.android.com/tips/layout-designtime-attributes), доступные в Android Studio.
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -277,16 +277,16 @@ com.futurice.project
 </LinearLayout>
 ```
 
-As a rule of thumb, attributes `android:layout_****` should be defined in the layout XML, while other attributes `android:****` should stay in a style XML. This rule has exceptions, but in general works fine. The idea is to keep only layout (positioning, margin, sizing) and content attributes in the layout files, while keeping all appearance details (colors, padding, font) in styles files.
+Как правило, атрибут `android:layout_****` должен быть указан в XML-файлах разметки,в то время ак атрибуты `android:****` должны находиться в XML-файлах стилей. У этого правила есть исключения, но в целом оно работает. Идея в том чтобы держать разметку (позиционирование, отступы, размеры) и другие атрибуты контента в файах разметки, а все внешние детали элементов (цвета, оформление, шрифты) в файлах стилей.
 
-The exceptions are:
+Исключения:
 
-- `android:id` should obviously be in the layout files
-- `android:orientation` for a `LinearLayout` normally makes more sense in layout files
-- `android:text` should be in layout files because it defines content
-- Sometimes it will make sense to make a generic style defining `android:layout_width` and `android:layout_height` but by default these should appear in the layout files
+- `android:id` должен находиться в файлах разметки
+- `android:orientation` для `LinearLayout` также более уместен в файлах разметки
+- `android:text` тоже размещать в файлах разметки так как он задает сам контент
+- Иногда имеет смысл определить `android:layout_width` и `android:layout_height` как стили, но по умолчанию они должны находиться в файлах разметки
 
-**Use styles.** Almost every project needs to properly use styles, because it is very common to have a repeated appearance for a view. At least you should have a common style for most text content in the application, for example:
+**Используйте стили.** Практически каждый проект нуждается в использовании стилей, так как очень часть приходится использовать повторяющиеся элементы. По крайней мере у вас долджен быть отдельный файл стилей для основного текстового контента в приложении, например:
 
 ```xml
 <style name="ContentText">
@@ -295,7 +295,7 @@ The exceptions are:
 </style>
 ```
 
-Applied to TextViews:
+Это применимо и к TextViews:
 
 ```xml
 <TextView
@@ -306,7 +306,7 @@ Applied to TextViews:
     />
 ```
 
-You probably will need to do the same for buttons, but don't stop there yet. Go beyond and move a group of related and repeated `android:****` attributes to a common style.
+Скорее всего вы захотете сделать то же самое и для кнопок, но не нужно на этом останавливаться. Используйте этот принцип для группировки схожих или повторяющихся атрибутов `android:****` в отдельный файл стилей.
 
 **Split a large style file into other files.** You don't need to have a single `styles.xml` file. Android SDK supports other files out of the box, there is nothing magical about the name `styles`, what matters are the XML tags `<style>` inside the file. Hence you can have files `styles.xml`, `styles_home.xml`, `styles_item_details.xml`, `styles_forms.xml`. Unlike resource directory names which carry some meaning for the build system, filenames in `res/values` can be arbitrary.
 
