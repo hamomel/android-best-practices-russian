@@ -445,22 +445,22 @@ com.futurice.project
 </LinearLayout>
 ```
 
-Even if you don't witness this explicitly in a layout file, it might end up happening if you are inflating (in Java) views into other views.
+Иногда можно не увидеть чрезмерную вложенность в файле разметки, так как это может происходить из-да добавления элементов в разметку непосредственно в Java файле.
 
-A couple of problems may occur. You might experience performance problems, because there are is a complex UI tree that the processor needs to handle. Another more serious issue is a possibility of [StackOverflowError](http://stackoverflow.com/questions/2762924/java-lang-stackoverflow-error-suspected-too-many-views).
+Из-за этого может возникнуть несколько проблем. В первую очередь проблемы с производительностью приложения, так как процессору необходимо управлять более сложной структурой элементов. Другая еще более серьёзная проблема это [StackOverflowError](http://stackoverflow.com/questions/2762924/java-lang-stackoverflow-error-suspected-too-many-views).
 
-Therefore, try to keep your views hierarchy as flat as possible: learn how to use [RelativeLayout](https://developer.android.com/guide/topics/ui/layout/relative.html), how to [optimize your layouts](http://developer.android.com/training/improving-layouts/optimizing-layout.html) and to use the [`<merge>` tag](http://stackoverflow.com/questions/8834898/what-is-the-purpose-of-androids-merge-tag-in-xml-layouts).
+В общем, постарайтесь сделать иерархию разметки наиболее более плоской: научитесь использовать [RelativeLayout](https://developer.android.com/guide/topics/ui/layout/relative.html), как [оптипизировать вашу разметку](http://developer.android.com/training/improving-layouts/optimizing-layout.html) и использовать [`тег <merge>`](http://stackoverflow.com/questions/8834898/what-is-the-purpose-of-androids-merge-tag-in-xml-layouts).
 
-**Beware of problems related to WebViews.** When you must display a web page, for instance for a news article, avoid doing client-side processing to clean the HTML, rather ask for a "*pure*" HTML from the backend programmers. [WebViews can also leak memory](http://stackoverflow.com/questions/3130654/memory-leak-in-webview) when they keep a reference to their Activity, instead of being bound to the ApplicationContext. Avoid using a WebView for simple texts or buttons, prefer TextViews or Buttons.
+**Остерегайтесь проблем, связанных с WebViews.** Когда вам нужно показать web-страницу, например новостную статью, не исполняйте код для очистки HTML на клиентской стороне, лучше всего попросить backend-программистов дать вам «чистый» HTML. [WebViews могут вызвать утечку памяти](http://stackoverflow.com/questions/3130654/memory-leak-in-webview) когда они ссылаются на Activity, вместо того, чтобы ссылаться на ApplicationContext. Избегайте использования WebView для создания текста или кнопок, для этого есть TextView и Button.
 
 
-### Test frameworks
+### Фреймворки для тестов
 
-Android SDK's testing framework is still infant, specially regarding UI tests. Android Gradle currently implements a test task called [`connectedAndroidTest`](http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Testing) which runs JUnit tests that you created, using an [extension of JUnit with helpers for Android](http://developer.android.com/reference/android/test/package-summary.html). This means you will need to run tests connected to a device, or an emulator. Follow the official guide [[1]](http://developer.android.com/tools/testing/testing_android.html) [[2]](http://developer.android.com/tools/testing/activity_test.html) for testing.
+Тестовый фреймвокр Android SDK's только развивается, особенно когда ресь идет о UI тестах. Android Gradle содержит задачу [`connectedAndroidTest`](http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Testing) которая запускает созданные вами тесты JUnit, используя [расширение JUnit с утилитами Android](http://developer.android.com/reference/android/test/package-summary.html). Это означает, что вы можете запускать тесты на присоединенном устройстве или эмуляторе. Следуйте официальным инструкциям по тестированию [[1]](http://developer.android.com/tools/testing/testing_android.html) [[2]](http://developer.android.com/tools/testing/activity_test.html).
 
-**Use [Robolectric](http://robolectric.org/) only for unit tests, not for views.** It is a test framework seeking to provide tests "disconnected from device" for the sake of development speed, suitable specially for unit tests on models and view models. However, testing under Robolectric is inaccurate and incomplete regarding UI tests. You will have problems testing UI elements related to animations, dialogs, etc, and this will be complicated by the fact that you are "walking in the dark" (testing without seeing the screen being controlled).
+**Используйте [Robolectric](http://robolectric.org/) только для Unit-тестов, не для UI-тестов.** Этот фреймворк позволяет запускать тесты без устройства, для увеличения скорости разработки и идеально подходит для unit-тестов моделей данных и view. Однако, UI-тесты Robolectric'а не полные и не точные. У вас возникнут проблемы с тестированем элементов UI, таких как анимации, диалоги, и т.д. Процесс тестирования происходит «с закрытыми глазами» (без возможности видеть тестируемый экран).
 
-**[Robotium](https://code.google.com/p/robotium/) makes writing UI tests easy.** You do not need Robotium for running connected tests for UI cases, but it will probably be beneficial to you because of its many helpers to get and analyse views, and control the screen. Test cases will look as simple as:
+**[Robotium](https://code.google.com/p/robotium/) значительно облегчает написание UI-тестов.** Вам не понадобится Robotium connected-тестов, но он будет очено полезен в получении и анализе views за счет большого количества утилит и контроля экрана во время тестов. Тесты выглядят достаточно просто:
 
 ```java
 solo.sendKey(Solo.MENU);
@@ -470,17 +470,17 @@ solo.clickOnText("Edit File Extensions");
 Assert.assertTrue(solo.searchText("rtf"));
 ```
 
-### Emulators
+### Эмуляторы
 
-If you are developing Android apps as a profession, buy a license for the [Genymotion emulator](http://www.genymotion.com/). Genymotion emulators run at a faster frames/sec rate than typical AVD emulators. They have tools for demoing your app, emulating network connection quality, GPS positions, etc. They are also ideal for connected tests. You have access to many (not all) different devices, so the cost of a Genymotion license is actually much cheaper than buying multiple real devices.
+Если вы - профессиональный Android разработчик, купите лицензию [эмулятора Genymotion](http://www.genymotion.com/). Genymotion работает быстрее обычных AVD-эмуляторов и с более высоким FPS. Он позволяет записывать демо-видео вашего приложения, эмулирует различное качество соединения, GPS и многое другое. Также он идеален для запуска тестов. У вас появится доступ к многим образам устройств на Android, так что на много дешевле купить Genymotion, чем покупать все эти устройства.
 
-Caveats are: Genymotion emulators don't ship all Google services such as Google Play Store and Maps. You might also need to test Samsung-specific APIs, so it's necessary to have a real Samsung device.
+Подводные камни: На эмуляторах Genymotion по умолчанию нет Google Play Store и Google Maps. Вам также могут понадобиться API, специфические для Samsung, по этому необходимо иметь свое устройство Samsung.
 
-### Proguard configuration
+### Конфигурация Proguard
 
-[ProGuard](http://proguard.sourceforge.net/) is normally used on Android projects to shrink and obfuscate the packaged code.
+[ProGuard](http://proguard.sourceforge.net/) обычно используется в проектах Android для сжатия и шифровки кода.
 
-Whether you are using ProGuard or not depends on your project configuration. Usually you would configure gradle to use ProGuard when building a release apk.
+Использование ProGuard зависит от конфигурации проекта. Обычно ProGuard используют для защиты release-версии проекта.
 
 ```groovy
 buildTypes {
@@ -500,6 +500,10 @@ Android framework uses a default configuration which can be found from `SDK_HOME
 
 A common problem related to ProGuard is to see the application crashing on startup with `ClassNotFoundException` or `NoSuchFieldException` or similar, even though the build command (i.e. `assembleRelease`) succeeded without warnings.
 This means one out of two things:
+
+Чтобы выяснить, какой участок кода нуждается в защите, а какой - нет, нужно отметить в коде одну или несколько точек входа. Обычно это классы, содержащие основне методы, апплеты, мидлеты, activities, и т.д. Фреймворк Android по умолчанию использует конфигурацию, которая находится в SDK_HOME/tools/proguard/proguard-android.txt. Вы можете задать собственные правила для найтройки ProGuard, просто поместив их в файл my-project/app/proguard-rules.pro, которые дополняют конфигурацию по умолчанию.
+
+Основная проблема, связанная с ProGuard — остановка приложения при запуске с ошибками ClassNotFoundException или NoSuchFieldException, даже если задача для сборки проекта (например, assembleRelease) отработала без ошибок. Это означает одно из двух:
 
 1. ProGuard has removed the class, enum, method, field or annotation, considering it's not required.
 2. ProGuard has obfuscated (renamed) the class, enum or field name, but it's being used indirectly by its original name, i.e. through Java reflection.
