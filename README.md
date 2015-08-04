@@ -495,46 +495,40 @@ buildTypes {
 }
 ```
 
-In order to determine which code has to be preserved and which code can be discarded or obfuscated, you have to specify one or more entry points to your code. These entry points are typically classes with main methods, applets, midlets, activities, etc.
-Android framework uses a default configuration which can be found from `SDK_HOME/tools/proguard/proguard-android.txt`. Using the above configuration, custom project-specific ProGuard rules, as defined in `my-project/app/proguard-rules.pro`, will be appended to the default configuration.
+Чтобы выяснить, какой участок кода нуждается в защите, а какой - нет, нужно отметить в коде одну или несколько точек входа. Обычно это классы, содержащие основне методы, апплеты, мидлеты, activities, и т.д. Фреймворк Android по умолчанию использует конфигурацию, которая находится в `SDK_HOME/tools/proguard/proguard-android.txt`. Вы можете задать собственные правила для найтройки ProGuard, просто поместив их в файл `my-project/app/proguard-rules.pro`, которые дополняют конфигурацию по умолчанию.
 
-A common problem related to ProGuard is to see the application crashing on startup with `ClassNotFoundException` or `NoSuchFieldException` or similar, even though the build command (i.e. `assembleRelease`) succeeded without warnings.
-This means one out of two things:
+Основная проблема, связанная с ProGuard — остановка приложения при запуске с ошибками `ClassNotFoundException` или `NoSuchFieldException`, даже если задача для сборки проекта (т.е. `assembleRelease`) отработала без ошибок. Это означает одно из двух:
 
-Чтобы выяснить, какой участок кода нуждается в защите, а какой - нет, нужно отметить в коде одну или несколько точек входа. Обычно это классы, содержащие основне методы, апплеты, мидлеты, activities, и т.д. Фреймворк Android по умолчанию использует конфигурацию, которая находится в SDK_HOME/tools/proguard/proguard-android.txt. Вы можете задать собственные правила для найтройки ProGuard, просто поместив их в файл my-project/app/proguard-rules.pro, которые дополняют конфигурацию по умолчанию.
+1. ProGuard удалил класс, enum, метод, поле or аннотацию, посчитав что она не нужна.
+2. ProGuard зашифровал (переименовал) класс, enum или имя поля, старое имя которого по прежнему используется (т.е. Java-отражение).
 
-Основная проблема, связанная с ProGuard — остановка приложения при запуске с ошибками ClassNotFoundException или NoSuchFieldException, даже если задача для сборки проекта (например, assembleRelease) отработала без ошибок. Это означает одно из двух:
+Проверьте `app/build/outputs/proguard/release/usage.txt` чтобы убедиться что удаленный объект нигде не упоминается.
+Проверьте `app/build/outputs/proguard/release/mapping.txt` чтобы убедиться что объект не был зашифрован.
 
-1. ProGuard has removed the class, enum, method, field or annotation, considering it's not required.
-2. ProGuard has obfuscated (renamed) the class, enum or field name, but it's being used indirectly by its original name, i.e. through Java reflection.
-
-Check `app/build/outputs/proguard/release/usage.txt` to see if the object in question has been removed.
-Check `app/build/outputs/proguard/release/mapping.txt` to see if the object in question has been obfuscated.
-
-In order to prevent ProGuard from *stripping away* needed classes or class members, add a `keep` options to your ProGuard config:
+Чтобы не допустить *выбрасывание* нужных классов или их членов ProGuard'ом, добавьте опцию `keep` в файл конфигурации ProGuard:
 ```
 -keep class com.futurice.project.MyClass { *; }
 ```
 
-To prevent ProGuard from *obfuscating* classes or class members, add a `keepnames`:
+Чтобы предотвратить *шифрование* классов или их членов, добавьте опцию `keepnames`:
 ```
 -keepnames class com.futurice.project.MyClass { *; }
 ```
 
-Check [this template's ProGuard config](https://github.com/futurice/android-best-practices/blob/master/templates/rx-architecture/app/proguard-rules.pro) for some examples.
-Read more at [Proguard](http://proguard.sourceforge.net/#manual/examples.html) for examples.
+Пример можно увидеть в [этом шаблоне конфигурации ProGuard](https://github.com/futurice/android-best-practices/blob/master/templates/rx-architecture/app/proguard-rules.pro).
+Больше примеров [Proguard](http://proguard.sourceforge.net/#manual/examples.html).
 
-**Early on in your project, make a release build** to check whether ProGuard rules are correctly keeping whatever is important. Also whenever you include new libraries, make a release build and test the apk on a device. Don't wait until your app is finally version "1.0" to make a release build, you might get several unpleasant surprises and a short time to fix them.
+**Создайте релиз-сборку на ранней стадии** чтобы проверить правила ProGuard на предмет сохранности кода. Также рекомендуется делать релиз-версию каждый раз когда вы добавляете новую библиотеку и тестировать приложение на устройстве. Не ждите версии "1.0" для выпуска release-версии, так как тогда могут быть неприятности при запуске приложения.
 
-**Tip.** Save the `mapping.txt` file for every release that you publish to your users. By retaining a copy of the `mapping.txt` file for each release build, you ensure that you can debug a problem if a user encounters a bug and submits an obfuscated stack trace.
+**Совет.** Сохраняйте файл `mapping.txt` для каждой выпущенной версии приложения. Сохраняя копию `mapping.txt` для каждой сборки, вы можете быть уверены в том что сможете отладить код если пользователь столкнется с ошибкой и отправит лог ошибок из зашифрованного кода.
 
-**DexGuard**. If you need hard-core tools for optimizing, and specially obfuscating release code, consider [DexGuard](http://www.saikoa.com/dexguard), a commercial software made by the same team that built ProGuard. It can also easily split Dex files to solve the 65k methods limitation.
+**DexGuard**. Если вам нужно оптимизировать или зашифровать код намного сильнее, используйте [DexGuard](http://www.saikoa.com/dexguard), коммерческий аналог ProGuard. Он также может разделить dex-файл для обхода лимита в 65k методов.
 
-### Thanks to
+### Благодарности
 
-Antti Lammi, Joni Karppinen, Peter Tackage, Timo Tuominen, Vera Izrailit, Vihtori Mäntylä, Mark Voit, Andre Medeiros, Paul Houghton and other Futurice developers for sharing their knowledge on Android development.
+Antti Lammi, Joni Karppinen, Peter Tackage, Timo Tuominen, Vera Izrailit, Vihtori Mäntylä, Mark Voit, Andre Medeiros, Paul Houghton и другим разработчики из команды Futurice за то, что они поделились своими знаниями в области Android разработки.
 
-### License
+### Лицензия
 
 [Futurice Oy](http://www.futurice.com)
 Creative Commons Attribution 4.0 International (CC BY 4.0)
